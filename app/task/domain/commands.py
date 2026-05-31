@@ -1,13 +1,19 @@
 from task.domain.models import Task, TaskStatus
+from common.models import CommonBaseModel
 
 class CreateTaskCommand(Task):
     ...
 
 class UpdateTaskCommand(Task):
     id: int
+    created_by_id: int | None = None
 
-class DeleteTaskCommand(Task):
+class DeleteTaskCommand(CommonBaseModel):
     id: int
 
 class UpdateTaskStatus(TaskStatus):
     id: int
+
+class UpdateTaskAssignee(CommonBaseModel):
+    id: int
+    assigned_to_id: int

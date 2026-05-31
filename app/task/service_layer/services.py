@@ -4,6 +4,7 @@ from task.domain.commands import (
     UpdateTaskCommand,
     UpdateTaskStatus,
     DeleteTaskCommand,
+    UpdateTaskAssignee
 )
 from common.unit_of_work import UnitOfWork
 from task.common.constants import STR_COMPLETED
@@ -36,6 +37,10 @@ class AbstractTaskService(abc.ABC):
 
     @abc.abstractmethod
     async def update_task_status(self, task_data: UpdateTaskStatus, current_user_id: int, current_user_role_id: int):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    async def update_assigned_user(self, task_data: UpdateTaskAssignee, current_user_id: int, current_user_role_id: int) -> dict:
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -131,6 +136,31 @@ class TaskService(AbstractTaskService):
             task_id=task_data.id,
             status=task_data.int_value,
         )
+
+    async def update_assigned_user(self, task_data: UpdateTaskAssignee, current_user_id: int, current_user_role_id: int) -> dict:
+        task = await self.uow.task_repository.get_task_by_id(task_data.id)
+
+        if task is None:
+            raise TaskNotFoundError()
+
+        has_permission = await self.permission_checker.check(
+            current_user_role_id,
+            [
+                common_constants.PERMISSION_ASSIGN_TASK_TO_ANY_USER,
+                common_constants.PERMISSION_ASSIGN_TASK_TO_USER
+            ]
+        )
+
+        if not has_permission:
+            raise YouDoNotHavePermissionError()
+
+        updated_task = await self.uow.task_repository.update_assigned_user(
+            task_id=task_data.id,
+            assigned_to_id=task_data.assigned_to_id,
+        )
+
+        return updated_task
+
 
     async def delete_task(self, task_data: DeleteTaskCommand, current_user_id: int, current_user_role_id: int) -> None:
         task = await self.uow.task_repository.get_task_by_id(task_data.id)
