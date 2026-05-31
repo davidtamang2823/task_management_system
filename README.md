@@ -20,51 +20,51 @@ A FastAPI-based task management application with role-based access control, JWT 
 - Git
 
 ### 1. Clone the repository
-```bash
+~~~bash
 git clone <repository-url>
 cd task_management_system
-```
+~~~
 
 ### 2. Create environment files inside root directory
-```bash
+~~~bash
 touch .env .env.db
-```
+~~~
 - Copy variables from `.env.example` to `.env`
 - Copy variables from `.env.db.example` to `.env.db`
 
 ### 3. Make entrypoint script executable
-```bash
+~~~bash
 chmod +x entrypoint.sh
-```
+~~~
 
 ### 4. Create Docker volume and network
 Remove existing volume or network if they already exist.
-```bash
+~~~bash
 docker volume create postgres_data
 docker volume create redis_data
 docker network create task_management_system_network
-```
+~~~
 
 ### 5. Build and start containers
-```bash
+~~~bash
 docker compose up -d --build
-```
+~~~
 
 Verify containers are running:
-```bash
+~~~bash
 docker container ls
-```
+~~~
 
 View logs of a specific container:
-```bash
+~~~bash
 docker logs -f <container_name>
-```
+~~~
 
 ### 6. Seed the database
 **Important: Do not skip this step.** This command creates admin user, dummy users, roles, and permissions.
-```bash
+~~~bash
 docker exec -it task_management_app python3 seed.py
-```
+~~~
 
 ---
 
@@ -73,18 +73,49 @@ docker exec -it task_management_app python3 seed.py
 ### `.env`
 | Variable | Description | Example |
 |---|---|---|
-| `SECRET_KEY` | JWT signing secret key | `your-secret-key` |
+| `SECRET_KEY` | JWT signing secret key | `afab22e0243a11f1a0ca505a65041aef` |
+| `DB_HOST` | PostgreSQL container hostname | `task_management_db` |
+| `DB_PORT` | PostgreSQL port | `5432` |
+| `DB_NAME` | PostgreSQL database name | `task_management_system_db` |
+| `DB_USER` | PostgreSQL username | `postgres` |
+| `DB_PASSWORD` | PostgreSQL password | `your-db-password` |
+| `ADMIN_EMAIL` | Seeded admin user email | `info@admin.com` |
+| `ADMIN_PASSWORD` | Seeded admin user password | `admin123` |
 | `JWT_ALGORITHM` | JWT hashing algorithm | `HS256` |
-| `ACCESS_TOKEN_EXPIRE_MINUTES` | Token expiry duration in minutes | `60` |
-| `DATABASE_URL` | Async PostgreSQL connection string | `postgresql+asyncpg://user:pass@db:5432/dbname` |
-| `REDIS_URL` | Redis connection string | `redis://redis:6379/0` |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Token expiry duration in minutes | `30` |
+
+Example `.env`:
+~~~properties
+SECRET_KEY=afab22e0243a11f1a0ca505a65041aef
+
+DB_HOST=task_management_db
+DB_PORT=5432
+DB_NAME=task_management_system_db
+DB_USER=postgres
+DB_PASSWORD=your-db-password
+
+ADMIN_EMAIL=info@admin.com
+ADMIN_PASSWORD=admin123
+
+JWT_ALGORITHM="HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+~~~
 
 ### `.env.db`
 | Variable | Description | Example |
 |---|---|---|
+| `POSTGRES_DB` | PostgreSQL database name | `task_management_system_db` |
 | `POSTGRES_USER` | PostgreSQL username | `postgres` |
-| `POSTGRES_PASSWORD` | PostgreSQL password | `postgres` |
-| `POSTGRES_DB` | PostgreSQL database name | `task_management` |
+| `POSTGRES_PASSWORD` | PostgreSQL password | `your-db-password` |
+
+Example `.env.db`:
+~~~properties
+POSTGRES_DB=task_management_system_db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your-db-password
+~~~
+
+> **Note:** Never commit real credentials to version control. The values above are examples — replace `your-db-password` with a strong password and generate a new `SECRET_KEY` for production.
 
 ---
 
@@ -93,37 +124,37 @@ docker exec -it task_management_app python3 seed.py
 ### Authentication
 
 #### Login
-```
+~~~
 POST /api/v1/auth/login
-```
+~~~
 Request body:
-```json
+~~~json
 {
     "email": "admin@example.com",
     "password": "password"
 }
-```
+~~~
 Response:
-```json
+~~~json
 {
     "access_token": "<jwt_token>",
     "token_type": "Bearer"
 }
-```
+~~~
 
 All subsequent requests must include the token in the `Authorization` header:
-```
+~~~
 Authorization: Bearer <jwt_token>
-```
+~~~
 
 ---
 
 ### Tasks
 
 #### List Tasks
-```
+~~~
 GET /api/v1/tasks/
-```
+~~~
 Query parameters:
 | Parameter | Type | Description |
 |---|---|---|
@@ -132,11 +163,11 @@ Query parameters:
 | `due_date_to` | str | Filter tasks up to this date |
 
 #### Get Task
-```
+~~~
 GET /api/v1/tasks/{task_id}
-```
+~~~
 Response:
-```json
+~~~json
 {
     "id": 1,
     "title": "Fix login bug",
@@ -156,14 +187,14 @@ Response:
         "email": "admin@example.com"
     }
 }
-```
+~~~
 
 #### Create Task
-```
+~~~
 POST /api/v1/tasks/
-```
+~~~
 Request body:
-```json
+~~~json
 {
     "title": "Fix login bug",
     "description": "Users are unable to login with correct credentials",
@@ -171,51 +202,51 @@ Request body:
     "assigned_to_id": 2,
     "created_by_id": 1
 }
-```
+~~~
 
 #### Update Task
-```
+~~~
 PUT /api/v1/tasks/{task_id}
-```
+~~~
 Request body: same as create task.
 
 #### Update Task Status
-```
+~~~
 PATCH /api/v1/tasks/{task_id}/status
-```
+~~~
 Request body:
-```json
+~~~json
 {
     "status": 2
 }
-```
+~~~
 
 #### Delete Task
-```
+~~~
 DELETE /api/v1/tasks/{task_id}
-```
+~~~
 Response:
-```json
+~~~json
 {
     "detail": "Task deleted successfully."
 }
-```
+~~~
 
 ---
 
 ### Users
 
 #### List Users
-```
+~~~
 GET /api/v1/users/
-```
+~~~
 Query parameters:
 | Parameter | Type | Description |
 |---|---|---|
 | `manager_id` | int | Filter users by their manager |
 
 Response:
-```json
+~~~json
 [
     {
         "id": 1,
@@ -228,7 +259,7 @@ Response:
         "manager_id": 1
     }
 ]
-```
+~~~
 
 ---
 
@@ -248,7 +279,7 @@ Roles and permissions are seeded automatically via `seed.py`. The default roles 
 
 The project follows a layered architecture based on Domain-Driven Design (DDD) principles.
 
-```
+~~~
 task-management-system/
 ├── alembic/                         # Database migrations
 │   ├── versions/
@@ -319,7 +350,7 @@ task-management-system/
 ├── alembic.ini
 ├── requirements.txt
 └── README.md
-```
+~~~
 
 ### Key Patterns
 
