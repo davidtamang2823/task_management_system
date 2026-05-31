@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request, Depends, status, HTTPException
+from pydantic_core import ValidationError
 
 from common.unit_of_work import UnitOfWork, get_uow
 from task.domain.commands import (
@@ -79,6 +80,8 @@ async def create_task(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=str(e),
         )
+    except ValidationError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail= str(e))
 
 
 @task_router.put("/{task_id}")
@@ -115,6 +118,8 @@ async def update_task(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=str(e),
         )
+    except ValidationError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail= str(e))
 
 
 @task_router.patch("/{task_id}/status")
@@ -147,6 +152,8 @@ async def update_task_status(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=str(e),
         )
+    except ValidationError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail= str(e))
 
 
 @task_router.patch("/{task_id}/assign")
@@ -178,6 +185,8 @@ async def update_assigned_user(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=str(e),
         )
+    except ValidationError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail= str(e))
 
 @task_router.delete("/{task_id}", status_code=status.HTTP_200_OK)
 async def delete_task(
@@ -202,3 +211,5 @@ async def delete_task(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=str(e),
         )
+    except ValidationError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail= str(e))

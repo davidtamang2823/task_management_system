@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, Request, status
+from pydantic_core import ValidationError
 from fastapi.exceptions import HTTPException
 from user.common.dependencies import get_user_service
 from user.domain.commands import CreateUserCommand, AuthenticateUserCommand
 from user.service_layer.services import AbstractUserService
 from user.domain import exceptions as user_domain_exceptions
 from user.service_layer import exceptions as user_service_layer_exceptions
-from pydantic_core import ValidationError
 
 user_router = APIRouter(prefix="/users", tags=["User"])
 
