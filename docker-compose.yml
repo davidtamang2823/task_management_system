@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:17-bookworm
+    container_name: task_management_db
+    env_file:
+      - .env.db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - task_management_system_network
+    restart: always
+
+  app:
+    build: .
+    container_name: task_management_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+    networks:
+      - task_management_system_network
+    depends_on:
+      - db
+    command: ["sh", "entrypoint.sh"]
+    restart: always
+
+  redis:
+    image: redis:8-bookworm
+    container_name: task_management_redis
+    ports:
+      - "6379:6379"
+    depends_on:
+      - app
+    volumes:
+      - redis_data:/data
+    networks:
+      - task_management_system_network
+    restart: always
+
+networks:
+  task_management_system_network:
+    external: true
+
+volumes:
+  postgres_data:
+    external: true
+  redis_data:
+    external: true
