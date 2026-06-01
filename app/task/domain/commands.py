@@ -1,4 +1,4 @@
-from task.domain.models import Task, TaskStatus
+from task.domain.models import Task, TaskStatusSchema
 from common.models import CommonBaseModel
 
 class CreateTaskCommand(Task):
@@ -11,7 +11,7 @@ class UpdateTaskCommand(Task):
 class DeleteTaskCommand(CommonBaseModel):
     id: int
 
-class UpdateTaskStatus(TaskStatus):
+class UpdateTaskStatus(TaskStatusSchema):
     id: int
 
 class UpdateTaskAssignee(CommonBaseModel):

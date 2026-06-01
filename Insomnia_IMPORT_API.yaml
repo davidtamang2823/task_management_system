@@ -1,0 +1,368 @@
+type: collection.insomnia.rest/5.0
+name: TaskManagementApp
+meta:
+  id: wrk_68dc0f730ef4402baee36730565f44e1
+  created: 1780208682561
+  modified: 1780208682561
+  description: ""
+collection:
+  - name: User
+    meta:
+      id: fld_4927812893c04d7e94b09636787e06d4
+      created: 1780208707061
+      modified: 1780279592266
+      sortKey: -1780208707061
+      description: ""
+    children:
+      - url: "{{ _.base_url }}users/register"
+        name: Register User
+        meta:
+          id: req_ed16cae822ac4eb7a4e565eacf25fe1e
+          created: 1780208740906
+          modified: 1780281684984
+          isPrivate: false
+          description: ""
+          sortKey: -1780208745782
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "davidhazard9843@gmail.com",
+              "password": "DaVID123@",
+              "first_name": "Rahul",
+              "last_name": "Bhatta"
+            }
+        headers:
+          - name: Content-Type
+            disabled: false
+            value: application/json
+            id: pair_57109ad27f894439824026c3d7d26d4b
+          - id: pair_e74df86f4b4548dc8af9f43c7f6ef675
+            name: Authorization
+            value: Bearer
+              eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1IiwiaWF0IjoxNzgwMjEyOTc5LCJleHAiOjE3ODAyMTQ3NzksImVtYWlsIjoiZGF2aWRoZXJvOTg0MUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiJ9.8gQKwaN3aVg4bIh8yQN8WjdmLSYt6Ke3BCLy6KDZu2U
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}users/login"
+        name: Login User
+        meta:
+          id: req_71eaa47630d84072b6ac1966dedddeb0
+          created: 1780208740907
+          modified: 1780282536804
+          isPrivate: false
+          description: ""
+          sortKey: -1780208745682
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "manager@example.com",
+              "password": "manager123"
+            }
+        headers:
+          - name: Content-Type
+            disabled: false
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}users/"
+        name: List Users
+        meta:
+          id: req_46eb7366e20a43fbb48224af62c42dfa
+          created: 1780277311595
+          modified: 1780282739994
+          isPrivate: false
+          description: ""
+          sortKey: -1780208745882
+        method: GET
+        headers:
+          - id: pair_566e9c6c769449948f28974b2807d3f7
+            name: Authorization
+            value: Bearer {% response 'body', 'req_71eaa47630d84072b6ac1966dedddeb0',
+              'b64::JC5hY2Nlc3NfdG9rZW4=::46b', 'always', 60 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Tasks
+    meta:
+      id: fld_4b7e4359406740f09432a951d027a2ab
+      created: 1780277345089
+      modified: 1780277345089
+      sortKey: -1780277345089
+      description: ""
+    children:
+      - url: "{{ _.base_url }}tasks/"
+        name: List Tasks
+        meta:
+          id: req_02d25aeb72ab454eb8058ec00a5ae74e
+          created: 1780277311598
+          modified: 1780280019178
+          isPrivate: false
+          description: ""
+          sortKey: -1780277360329
+        method: GET
+        headers:
+          - id: pair_de079410da2f4ff4a1de5b396417ad75
+            name: Authorization
+            value: Bearer {% response 'body', 'req_71eaa47630d84072b6ac1966dedddeb0',
+              'b64::JC5hY2Nlc3NfdG9rZW4=::46b', 'always', 60 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}tasks/"
+        name: Create Task
+        meta:
+          id: req_d4c88370e80644f1a0d7ba8951ac909d
+          created: 1780277311598
+          modified: 1780282586895
+          isPrivate: false
+          description: ""
+          sortKey: -1780277360229
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "title": "Implement task",
+              "description": "Read requirement document and start coding",
+              "due_date": "2026-06-17",
+              "assigned_to_id": 3
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - id: pair_ba6c865756ce4b65bb7c14f09b4f6aab
+            name: Authorization
+            value: Bearer {% response 'body', 'req_71eaa47630d84072b6ac1966dedddeb0',
+              'b64::JC5hY2Nlc3NfdG9rZW4=::46b', 'always', 60 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}tasks/3/"
+        name: Get Task
+        meta:
+          id: req_3a5f9ce2b45c43b498a61f550afc2be5
+          created: 1780277311599
+          modified: 1780281831287
+          isPrivate: false
+          description: ""
+          sortKey: -1780277360429
+        method: GET
+        headers:
+          - id: pair_a3b56d4104f941d2b964b43108d95d45
+            name: Authorization
+            value: Bearer {% response 'body', 'req_71eaa47630d84072b6ac1966dedddeb0',
+              'b64::JC5hY2Nlc3NfdG9rZW4=::46b', 'always', 60 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}tasks/4"
+        name: Update Task
+        meta:
+          id: req_eb418c90d2024aef831266e143f172c4
+          created: 1780277311600
+          modified: 1780282680510
+          isPrivate: false
+          description: ""
+          sortKey: -1780277359979
+        method: PUT
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "title": "Implement task (edited)",
+              "description": "Read requirement document and start coding (edited)",
+              "due_date": "2026-06-18",
+              "assigned_to_id": 3,
+            	"status": "IN_PROGRESS"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - id: pair_60b9c38520aa4a2cb0c100ed634eb566
+            name: Authorization
+            value: Bearer {% response 'body', 'req_71eaa47630d84072b6ac1966dedddeb0',
+              'b64::JC5hY2Nlc3NfdG9rZW4=::46b', 'always', 60 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}tasks/4"
+        name: Delete Task
+        meta:
+          id: req_215da13e5a294b7dbf2510e9e584f345
+          created: 1780277311601
+          modified: 1780282761604
+          isPrivate: false
+          description: ""
+          sortKey: -1780277359729
+        method: DELETE
+        headers:
+          - id: pair_2945e4a729fe4dd3b616980902ae233b
+            name: Authorization
+            value: Bearer {% response 'body', 'req_71eaa47630d84072b6ac1966dedddeb0',
+              'b64::JC5hY2Nlc3NfdG9rZW4=::46b', 'always', 60 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}tasks/4/status"
+        name: Update Task Status
+        meta:
+          id: req_0b6aa081e807490ba36d69f51f6b0140
+          created: 1780277311602
+          modified: 1780282711617
+          isPrivate: false
+          description: ""
+          sortKey: -1780277359929
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"status": "PENDING"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - id: pair_4f0d40118faf4f0894e0af61ff418085
+            name: Authorization
+            value: Bearer {% response 'body', 'req_71eaa47630d84072b6ac1966dedddeb0',
+              'b64::JC5hY2Nlc3NfdG9rZW4=::46b', 'always', 60 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}tasks/4/assign"
+        name: Update Assigned User
+        meta:
+          id: req_6b5e4884e5834de387df3fbf7df6f3bc
+          created: 1780277311603
+          modified: 1780282749169
+          isPrivate: false
+          description: ""
+          sortKey: -1780277359829
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"assigned_to_id": 4
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - id: pair_40c4a89641db4361be94a4de8820574b
+            name: Authorization
+            value: Bearer {% response 'body', 'req_71eaa47630d84072b6ac1966dedddeb0',
+              'b64::JC5hY2Nlc3NfdG9rZW4=::46b', 'always', 60 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_a6198f533cc7f74fdb017d424595abe982576f1c
+    created: 1780208682565
+    modified: 1780279592262
+environments:
+  name: Base Environment
+  meta:
+    id: env_a6198f533cc7f74fdb017d424595abe982576f1c
+    created: 1780208682563
+    modified: 1780279592265
+    isPrivate: false
+  data:
+    base_url: http://localhost:8000/
+  subEnvironments:
+    - name: OpenAPI env example.com
+      meta:
+        id: env_5fc273491f7e4b0ba811d75abb04de56
+        created: 1780208740905
+        modified: 1780208740905
+        isPrivate: false
+        sortKey: 1780208740905
+      data:
+        scheme: http
+        base_path: ""
+        host: example.com
+    - name: OpenAPI env example.com
+      meta:
+        id: env_c9d223d69aee4eeab0eaf34831fd173c
+        created: 1780277311592
+        modified: 1780277311592
+        isPrivate: false
+        sortKey: 1780277311592
+      data:
+        scheme: http
+        base_path: ""
+        host: example.com

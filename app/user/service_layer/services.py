@@ -70,10 +70,7 @@ class UserService(AbstractUserService):
     async def authenticate_user(self, authenticate_data: AuthenticateUserCommand):
         user = await self.uow.user_repository.get_by_email(authenticate_data.email)
 
-        if user is None:
-            raise UserNotFoundError()
-
-        if not self.auth_handler.verify_password(authenticate_data.password, user.get("password")):
+        if user is None or not self.auth_handler.verify_password(authenticate_data.password, user.get("password")):
             raise InvalidCredentialsError()
 
         token = self.auth_handler.create_access_token(
@@ -86,7 +83,9 @@ class UserService(AbstractUserService):
                 "iat": datetime.now(timezone.utc),
                 "exp": datetime.now(timezone.utc) + timedelta(minutes=settings.access_token_expire_minutes),
                 "email": user.get("email"),
+                "role_id": user.get("role_id"),
                 "role": user.get("role"),
+                "user_id": user.get("id"),
             },
         )
 

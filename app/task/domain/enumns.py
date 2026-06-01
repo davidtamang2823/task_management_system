@@ -1,8 +1,8 @@
-from enum import StrEnum
+from enum import Enum
 from task.common import constants as task_constants
 
 
-class TaskStatus(StrEnum):
+class TaskStatus(str, Enum):
     PENDING = task_constants.STR_PENDING
     IN_PROGRESS = task_constants.STR_IN_PROGRESS
     COMPLETED = task_constants.STR_COMPLETED

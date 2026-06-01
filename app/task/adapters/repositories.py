@@ -51,7 +51,7 @@ class TaskRepository(AbstractTaskRepository):
             title=task_orm_obj.title,
             description=task_orm_obj.description,
             due_date=task_orm_obj.due_date,
-            status=task_orm_obj.status.int_value if task.status else task_constants.INT_IN_PROGRESS,
+            status=task_orm_obj.status.int_value if task_orm_obj.status else task_constants.INT_PENDING,
             assigned_to_id=task_orm_obj.assigned_to_id,
             created_by_id=task_orm_obj.created_by_id,
         )
@@ -62,7 +62,7 @@ class TaskRepository(AbstractTaskRepository):
             "title": task_orm_obj.title,
             "description": task_orm_obj.description,
             "due_date": task_orm_obj.due_date,
-            "status": task_constants.TASK_STATUS_INT_TO_STR.get(task.status),
+            "status": task_constants.TASK_STATUS_INT_TO_STR.get(task_orm_obj.status),
             "assigned_to": {
                 "id": task_orm_obj.assigned_to.id,
                 "first_name": task_orm_obj.assigned_to.first_name,
@@ -152,9 +152,8 @@ class TaskRepository(AbstractTaskRepository):
         task_orm_obj.title = task.title
         task_orm_obj.description = task.description
         task_orm_obj.due_date = task.due_date
-        task_orm_obj.status = task.status.int_value if task.status else task_constants.INT_IN_PROGRESS
+        task_orm_obj.status = task.status.int_value if task.status else task_constants.INT_PENDING
         task_orm_obj.assigned_to_id = task.assigned_to_id
-        task_orm_obj.created_by_id = task.created_by_id
 
         await self.session.flush()
         await self.session.refresh(task_orm_obj, attribute_names=["assigned_to", "created_by"])

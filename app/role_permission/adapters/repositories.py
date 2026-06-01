@@ -49,23 +49,20 @@ class RolePermissionRepository(AbstractRolePermissionRepository):
         return self._role_to_dict_with_permissions(role)
 
 
-    @staticmethod
-    def _role_to_dict(role: role_perm_orm.Role):
+    def _role_to_dict(self, role: role_perm_orm.Role):
         return {
             "id": role.id,
             "name": role.name
         }
     
-    @staticmethod
-    def _permission_to_dict(permission: role_perm_orm.Permission) -> dict:
+    def _permission_to_dict(self, permission: role_perm_orm.Permission) -> dict:
         return {
             "id": permission.id,
             "name": permission.name,
             "display_name": permission.display_name,
         }
 
-    @staticmethod
-    def _role_to_dict_with_permissions(role: role_perm_orm.Role) -> dict:
+    def _role_to_dict_with_permissions(self, role: role_perm_orm.Role) -> dict:
         return {
             "id": role.id,
             "name": role.name,

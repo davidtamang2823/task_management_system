@@ -15,7 +15,7 @@ async def list_users(request: Request, user_service: AbstractUserService = Depen
     response_data = await user_service.list_users(
         current_user_id=request.state.user_id,
         current_user_role_id=request.state.role_id,
-        filter={}
+        user_filters={}
     )
     return response_data
 

@@ -47,7 +47,7 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
             )
 
         request.state.user_id = payload.get("user_id")
-        request.state.role = payload.get("role")
+        request.state.role_id = payload.get("role_id")
         request.state.email = payload.get("email")
 
         return await call_next(request)

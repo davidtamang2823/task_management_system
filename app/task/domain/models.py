@@ -2,7 +2,7 @@ import datetime
 from common.models import CommonBaseModel
 from task.domain.enumns import TaskStatus
 
-class TaskStatus(CommonBaseModel):
+class TaskStatusSchema(CommonBaseModel):
     status: TaskStatus
 
 class Task(CommonBaseModel):

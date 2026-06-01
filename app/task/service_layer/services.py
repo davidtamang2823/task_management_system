@@ -113,7 +113,7 @@ class TaskService(AbstractTaskService):
         if not has_permission:
             raise YouDoNotHavePermissionError()
 
-        if existing_task.get("status") == STR_COMPLETED:
+        if existing_task.get("status") == STR_COMPLETED and task_data.status.value != STR_COMPLETED:
             raise TaskAlreadyCompletedError()
 
         return await self.uow.task_repository.update(task_data)
@@ -129,12 +129,22 @@ class TaskService(AbstractTaskService):
             [common_constants.PERMISSION_UPDATE_TASK_STATUS],
         )
 
+        is_created_by_or_assigned_to = (
+            task["created_by"]["id"] == current_user_id
+            or task["assigned_to"]["id"] == current_user_id
+        )
+
         if not has_permission:
             raise YouDoNotHavePermissionError()
+        elif not is_created_by_or_assigned_to:
+            raise YouDoNotHavePermissionError()
+
+        if task.get("status") == STR_COMPLETED and task_data.status.value != STR_COMPLETED:
+            raise TaskAlreadyCompletedError()
 
         await self.uow.task_repository.update_task_status(
             task_id=task_data.id,
-            status=task_data.int_value,
+            status=task_data.status.int_value,
         )
 
     async def update_assigned_user(self, task_data: UpdateTaskAssignee, current_user_id: int, current_user_role_id: int) -> dict:
