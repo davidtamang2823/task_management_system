@@ -155,12 +155,6 @@ Authorization: Bearer <jwt_token>
 ~~~
 GET /api/v1/tasks/
 ~~~
-Query parameters:
-| Parameter | Type | Description |
-|---|---|---|
-| `status_filter` | int | Filter by task status |
-| `due_date_from` | str | Filter tasks from this date |
-| `due_date_to` | str | Filter tasks up to this date |
 
 #### Get Task
 ~~~
@@ -199,8 +193,7 @@ Request body:
     "title": "Fix login bug",
     "description": "Users are unable to login with correct credentials",
     "due_date": "2024-12-31",
-    "assigned_to_id": 2,
-    "created_by_id": 1
+    "assigned_to_id": 2
 }
 ~~~
 
@@ -217,7 +210,7 @@ PATCH /api/v1/tasks/{task_id}/status
 Request body:
 ~~~json
 {
-    "status": 2
+    "status": "IN_PROGRESS"
 }
 ~~~
 
@@ -240,10 +233,6 @@ Response:
 ~~~
 GET /api/v1/users/
 ~~~
-Query parameters:
-| Parameter | Type | Description |
-|---|---|---|
-| `manager_id` | int | Filter users by their manager |
 
 Response:
 ~~~json
